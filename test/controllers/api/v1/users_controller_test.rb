@@ -2,14 +2,14 @@ require 'test_helper'
 
 class API::V1::UsersControllerTest < ActionController::TestCase
   setup do
-    request.headers['Accept'] = "application/vnd.marketplace.v1,json"
+    include_default_request_headers
   end
 
   test "GET #show returns info as a hash" do
     user = create(:user)
     get :show, id: user
 
-    parse_response_body do |body|
+    json_response_body do |body|
       assert_equal user.name, body[:name]
       assert_equal user.email, body[:email]
     end
@@ -24,7 +24,7 @@ class API::V1::UsersControllerTest < ActionController::TestCase
       post :create, user: attributes
     end
 
-    parse_response_body do |body|
+    json_response_body do |body|
       %i[name email].each do |attribute|
         assert_equal attributes[attribute], body[attribute]
       end
@@ -40,7 +40,7 @@ class API::V1::UsersControllerTest < ActionController::TestCase
       post :create, user: attributes
     end
 
-    parse_response_body do |body|
+    json_response_body do |body|
       assert_includes body, :errors
       assert_includes body[:errors][:email], "is invalid"
     end
@@ -50,12 +50,9 @@ class API::V1::UsersControllerTest < ActionController::TestCase
 
   test "PATCH #update with valid attributes" do
     user = create(:user)
+    patch :update, id: user, user: { name: "New Name" }
 
-    patch :update, id: user, user: {
-      name: "New Name"
-    }
-
-    parse_response_body do |body|
+    json_response_body do |body|
       assert_equal "New Name", body[:name]
     end
 
@@ -64,12 +61,9 @@ class API::V1::UsersControllerTest < ActionController::TestCase
 
   test "PATCH #update with invalid attributes" do
     user = create(:user)
+    patch :update, id: user, user: { name: nil }
 
-    patch :update, id: user, user: {
-      name: ""
-    }
-
-    parse_response_body do |body|
+    json_response_body do |body|
       assert_includes body, :errors
       assert_includes body[:errors][:name], "can't be blank"
     end
@@ -85,13 +79,5 @@ class API::V1::UsersControllerTest < ActionController::TestCase
     end
 
     assert_response :no_content
-  end
-
-private
-
-  def parse_response_body(&block)
-    JSON.parse(response.body, symbolize_names: true).tap do |content|
-      yield content if block_given?
-    end
   end
 end
