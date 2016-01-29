@@ -1,9 +1,9 @@
 require 'test_helper'
 
-class ApiConstraintsTest < ActiveSupport::TestCase
+class APIConstraintsTest < ActiveSupport::TestCase
   setup do
-    @api_constraints_v1 = ApiConstraints.new(version: 1)
-    @api_constraints_v2 = ApiConstraints.new(version: 2, default: true)
+    @api_constraints_v1 = APIConstraints.new(version: 1)
+    @api_constraints_v2 = APIConstraints.new(version: 2, default: true)
   end
 
   test "matches? returns true when the version matches the 'Accept' header" do

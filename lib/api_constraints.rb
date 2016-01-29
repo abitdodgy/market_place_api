@@ -1,4 +1,4 @@
-class ApiConstraints
+class APIConstraints
   def initialize(version:, default: false)
     @version = version
     @default = default
