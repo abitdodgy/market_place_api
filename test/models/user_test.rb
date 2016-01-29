@@ -8,6 +8,7 @@ class UserTest < ActiveSupport::TestCase
 
   should have_db_index(:email).unique(true)
   should have_db_index(:password_reset_digest).unique(true)
+  should have_db_index(:auth_token).unique(true)
 
   valid_emails = [
     'homer@simp.sp',
@@ -39,4 +40,11 @@ class UserTest < ActiveSupport::TestCase
 
   should validate_presence_of(:name)
   should validate_presence_of(:password)
+
+  test "#auth_token is set before the user is created" do
+    user = build(:user)
+    assert_nil user.auth_token
+    user.save!
+    refute_nil user.auth_token
+  end
 end
