@@ -2,7 +2,7 @@ require 'test_helper'
 
 class API::V1::UsersControllerTest < ActionController::TestCase
   setup do
-    request.headers['Accept'] = "application/vnd.marketplace.v1"
+    request.headers['Accept'] = "application/vnd.marketplace.v1,json"
   end
 
   test "GET #show returns info as a hash" do
