@@ -77,6 +77,16 @@ class API::V1::UsersControllerTest < ActionController::TestCase
     assert_response :unprocessable_entity
   end
 
+  test "DELETE #destroy deletes a user" do
+    user = create(:user)
+
+    assert_difference 'User.count', -1 do
+      delete :destroy, id: user
+    end
+
+    assert_response :no_content
+  end
+
 private
 
   def parse_response_body(&block)
