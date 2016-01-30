@@ -10,8 +10,9 @@ class API::V1::UsersControllerTest < ActionController::TestCase
     get :show, id: user
 
     json_response_body do |body|
-      assert_equal user.name, body[:name]
-      assert_equal user.email, body[:email]
+      %i[name email auth_token].each do |attribute|
+        assert_equal user.send(attribute), body[attribute]
+      end
     end
 
     assert_response :success
@@ -28,6 +29,8 @@ class API::V1::UsersControllerTest < ActionController::TestCase
       %i[name email].each do |attribute|
         assert_equal attributes[attribute], body[attribute]
       end
+
+      assert_not_nil body[:auth_token]
     end
 
     assert_response :created
@@ -40,11 +43,7 @@ class API::V1::UsersControllerTest < ActionController::TestCase
       post :create, user: attributes
     end
 
-    json_response_body do |body|
-      assert_includes body, :errors
-      assert_includes body[:errors][:email], "is invalid"
-    end
-
+    assert_includes json_response_body[:errors][:email], "is invalid"
     assert_response :unprocessable_entity
   end
 
@@ -52,10 +51,7 @@ class API::V1::UsersControllerTest < ActionController::TestCase
     user = create(:user)
     patch :update, id: user, user: { name: "New Name" }
 
-    json_response_body do |body|
-      assert_equal "New Name", body[:name]
-    end
-
+    assert_equal "New Name", json_response_body[:name]
     assert_response :success
   end
 
@@ -63,11 +59,7 @@ class API::V1::UsersControllerTest < ActionController::TestCase
     user = create(:user)
     patch :update, id: user, user: { name: nil }
 
-    json_response_body do |body|
-      assert_includes body, :errors
-      assert_includes body[:errors][:name], "can't be blank"
-    end
-
+    assert_includes json_response_body[:errors][:name], "can't be blank"
     assert_response :unprocessable_entity
   end
 
