@@ -30,4 +30,14 @@ class AuthableTest < ActionController::TestCase
     assert_equal "Not authenticated", json_response_body[:errors]
     assert_response :unauthorized
   end
+
+  test "#signed_in? returns true if `current_user` is present" do
+    @dummy.stub(:current_user, nil) do
+      refute @dummy.signed_in?
+    end
+
+    @dummy.stub(:current_user, true) do
+      assert @dummy.signed_in?
+    end
+  end
 end
