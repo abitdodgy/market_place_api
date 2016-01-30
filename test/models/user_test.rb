@@ -10,6 +10,8 @@ class UserTest < ActiveSupport::TestCase
   should have_db_index(:password_reset_digest).unique(true)
   should have_db_index(:auth_token).unique(true)
 
+  should have_many(:products)
+
   valid_emails = [
     'homer@simp.sp',
     '_BART_@simp.com',
