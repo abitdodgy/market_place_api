@@ -1,4 +1,6 @@
 class API::V1::UsersController < ApplicationController
+  before_action :authenticate_with_token!, only: [:update, :destroy]
+
   def show
     @user = User.find(params[:id])
   end
@@ -23,6 +25,7 @@ class API::V1::UsersController < ApplicationController
 
   def destroy
     user = User.find(params[:id])
+    authorize user
     user.destroy!
     head 204
   end

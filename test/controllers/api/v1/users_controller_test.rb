@@ -47,8 +47,14 @@ class API::V1::UsersControllerTest < ActionController::TestCase
     assert_response :unprocessable_entity
   end
 
+  test "PATCH #update when not authenticated" do
+    patch :update, id: 1
+    assert_response :unauthorized
+  end
+
   test "PATCH #update with valid attributes" do
     user = create(:user)
+    api_authorization_header token: user.auth_token
     patch :update, id: user, user: { name: "New Name" }
 
     assert_equal "New Name", json_response_body[:name]
@@ -57,19 +63,38 @@ class API::V1::UsersControllerTest < ActionController::TestCase
 
   test "PATCH #update with invalid attributes" do
     user = create(:user)
+    api_authorization_header token: user.auth_token
     patch :update, id: user, user: { name: nil }
 
     assert_includes json_response_body[:errors][:name], "can't be blank"
     assert_response :unprocessable_entity
   end
 
-  test "DELETE #destroy deletes a user" do
+  test "DELETE #destroy not authenticated" do
+    delete :destroy, id: 1
+    assert_response :unauthorized
+  end
+
+  test "DELETE #destroy when same user" do
     user = create(:user)
+    api_authorization_header token: user.auth_token
 
     assert_difference 'User.count', -1 do
       delete :destroy, id: user
     end
 
     assert_response :no_content
+  end
+
+  test "DELETE #destroy when wrong user" do
+    user = create(:user)
+    other_user = create(:user)
+    api_authorization_header token: user.auth_token
+
+    assert_no_difference 'User.count' do
+      delete :destroy, id: other_user
+    end
+
+    assert_response :forbidden
   end
 end
