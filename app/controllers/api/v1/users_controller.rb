@@ -16,6 +16,7 @@ class API::V1::UsersController < ApplicationController
 
   def update
     @user = User.find(params[:id])
+    authorize @user
     if @user.update(user_params)
       render :show, status: 200, location: [:api, @user]
     else

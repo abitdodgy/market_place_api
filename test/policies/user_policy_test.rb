@@ -12,11 +12,6 @@ class UserPolicyTest < ActiveSupport::TestCase
     assert_equal Pundit.policy_scope(@current_user, User).all, User.all
   end
 
-  test "#show?" do
-    record = OpenStruct.new(id: 2)
-    assert UserPolicy.new(@current_user, record).show?
-  end
-
   test "#update? when same user" do
     assert UserPolicy.new(@current_user, @current_user).update?
   end

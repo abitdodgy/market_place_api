@@ -70,6 +70,17 @@ class API::V1::UsersControllerTest < ActionController::TestCase
     assert_response :unprocessable_entity
   end
 
+  test "PATCH #update when wrong user" do
+    user = create(:user)
+    api_authorization_header token: user.auth_token
+    other_user = create(:user, name: "Not Hacked")
+
+    patch :update, id: other_user, user: { name: "Hacked!" }
+
+    assert_equal "Not Hacked", other_user.reload.name
+    assert_response :forbidden
+  end
+
   test "DELETE #destroy not authenticated" do
     delete :destroy, id: 1
     assert_response :unauthorized
