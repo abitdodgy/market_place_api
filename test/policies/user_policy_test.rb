@@ -10,7 +10,8 @@ class UserPolicyTest < ActiveSupport::TestCase
   end
 
   test "#permitted_attributes" do
-    skip "TODO"
+    attributes = [:name, :email, :password]
+    assert_equal attributes, UserPolicy.new(@current_user, User.new).permitted_attributes
   end
 
   test "#show?" do
