@@ -12,10 +12,8 @@ class API::V1::ProductsController < ApplicationController
 
   def create
     @product = Product.new(owner: current_user)
-    authorize @product
-
     @product.assign_attributes permitted_attributes(@product)
-
+    authorize @product
     if @product.save
       render :show, status: 201, location: [:api, @product]
     else
