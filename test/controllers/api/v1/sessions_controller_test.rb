@@ -12,6 +12,9 @@ class API::V1::SessionsControllerTest < ActionController::TestCase
     json_response_body do |body|
       refute_equal @user.auth_token, body[:auth_token]
       assert_equal @user.reload.auth_token, body[:auth_token]
+
+      expected = as_parsed_json(@user, only: [:id, :name, :email, :created_at, :auth_token])
+      assert_equal expected, body
     end
 
     assert_response :success

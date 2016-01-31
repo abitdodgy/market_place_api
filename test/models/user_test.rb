@@ -5,6 +5,8 @@ class UserTest < ActiveSupport::TestCase
   should have_db_column(:email).of_type(:string).with_options(null: false)
   should have_db_column(:password_digest).of_type(:string).with_options(null: false)
   should have_db_column(:password_reset_digest).of_type(:string).with_options(null: true)
+  should have_db_column(:created_at).of_type(:datetime).with_options(null: false)
+  should have_db_column(:updated_at).of_type(:datetime).with_options(null: false)
 
   should have_db_index(:email).unique(true)
   should have_db_index(:password_reset_digest).unique(true)

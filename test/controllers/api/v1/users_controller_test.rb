@@ -10,9 +10,8 @@ class API::V1::UsersControllerTest < ActionController::TestCase
     get :show, id: user
 
     json_response_body do |body|
-      %i[name email auth_token].each do |attribute|
-        assert_equal user.send(attribute), body[attribute]
-      end
+      expected = as_parsed_json(user, only: [:id, :name, :email, :created_at])
+      assert_equal expected, body
     end
 
     assert_response :success
@@ -26,11 +25,8 @@ class API::V1::UsersControllerTest < ActionController::TestCase
     end
 
     json_response_body do |body|
-      %i[name email].each do |attribute|
-        assert_equal attributes[attribute], body[attribute]
-      end
-
-      assert_not_nil body[:auth_token]
+      expected = as_parsed_json(User.last, only: [:id, :name, :email, :created_at, :auth_token])
+      assert_equal expected, body
     end
 
     assert_response :created
@@ -43,7 +39,11 @@ class API::V1::UsersControllerTest < ActionController::TestCase
       post :create, user: attributes
     end
 
-    assert_includes json_response_body[:errors][:email], "is invalid"
+    expected = {
+      errors: User.new(attributes, &:valid?).errors.messages
+    }
+
+    assert_equal expected, json_response_body
     assert_response :unprocessable_entity
   end
 
@@ -57,7 +57,13 @@ class API::V1::UsersControllerTest < ActionController::TestCase
     api_authorization_header token: user.auth_token
     patch :update, id: user, user: { name: "New Name" }
 
-    assert_equal "New Name", json_response_body[:name]
+    json_response_body do |body|
+      assert_equal "New Name", body[:name]
+
+      expected = as_parsed_json(User.last, only: [:id, :name, :email, :created_at])
+      assert_equal expected, body
+    end
+
     assert_response :success
   end
 

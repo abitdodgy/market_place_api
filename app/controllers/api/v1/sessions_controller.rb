@@ -1,9 +1,9 @@
 class API::V1::SessionsController < ApplicationController
   def create
-    user = User.find_by(email: params[:email])
-    if user && user.authenticate(params[:password])
-      user.regenerate_auth_token
-      render user, location: [:api, user]
+    @user = User.find_by(email: params[:email])
+    if @user && @user.authenticate(params[:password])
+      @user.regenerate_auth_token
+      render :create, location: [:api, @user]
     else
       render json: { errors: "Invalid username or password" }, status: 401
     end

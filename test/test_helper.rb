@@ -13,4 +13,8 @@ class ActiveSupport::TestCase
   include Support::Request::HeadersHelpers
 
   fixtures :all
+
+  def as_parsed_json(object, options = {})
+	JSON.parse object.to_json(options), symbolize_names: true
+  end
 end

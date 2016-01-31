@@ -1,8 +1,8 @@
 FactoryGirl.define do
   factory :product do
-    user
+    owner
     title "Incredible Product"
-    price_in_cents 132
+    price_in_cents { rand(10_000) }
     published false
   end
 end
