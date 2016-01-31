@@ -15,6 +15,7 @@ class API::V1::ProductsController < ApplicationController
     authorize @product
 
     @product.assign_attributes permitted_attributes(@product)
+
     if @product.save
       render :show, status: 201, location: [:api, @product]
     else

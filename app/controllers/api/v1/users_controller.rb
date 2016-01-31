@@ -6,7 +6,9 @@ class API::V1::UsersController < ApplicationController
   end
 
   def create
-    @user = User.new(user_params)
+    @user = User.new
+    @user.assign_attributes permitted_attributes(@user)
+
     if @user.save
       render :create, status: 201, location: [:api, @user]
     else
@@ -16,7 +18,7 @@ class API::V1::UsersController < ApplicationController
 
   def update
     @user = User.find(params[:id])
-    if @user.update(user_params)
+    if @user.update permitted_attributes(@user)
       render :show, status: 200, location: [:api, @user]
     else
       render json: { errors: @user.errors }, status: 422
@@ -28,9 +30,5 @@ class API::V1::UsersController < ApplicationController
     authorize user
     user.destroy!
     head 204
-  end
-
-  private def user_params
-    params.require(:user).permit(:name, :email, :password)
   end
 end

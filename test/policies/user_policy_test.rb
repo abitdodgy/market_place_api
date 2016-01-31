@@ -5,11 +5,12 @@ class UserPolicyTest < ActiveSupport::TestCase
     @current_user = OpenStruct.new(id: 1)
   end
 
-  def test_scope
-  end
-
   test "Scope#resolve" do
     assert_equal Pundit.policy_scope(@current_user, User).all, User.all
+  end
+
+  test "#permitted_attributes" do
+    skip "TODO"
   end
 
   test "#show?" do

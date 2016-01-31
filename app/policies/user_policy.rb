@@ -5,6 +5,10 @@ class UserPolicy < ApplicationPolicy
     end
   end
 
+  def permitted_attributes
+    [:name, :email, :password]
+  end
+
   def show?
     true
   end
