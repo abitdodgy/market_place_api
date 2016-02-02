@@ -25,4 +25,24 @@ class ProductPolicyTest < ActiveSupport::TestCase
     record = OpenStruct.new(id: 2)
     assert ProductPolicy.new(@current_user, record).create?
   end
+
+  test "#update? when owner" do
+    record = OpenStruct.new(id: 2, user_id: 1)
+    assert ProductPolicy.new(@current_user, record).update?
+  end
+
+  test "#update? when wrong user" do
+    record = OpenStruct.new(id: 2, user_id: 2)
+    refute ProductPolicy.new(@current_user, record).update?
+  end
+
+  test "#destroy? when owner" do
+    record = OpenStruct.new(id: 2, user_id: 1)
+    assert ProductPolicy.new(@current_user, record).destroy?
+  end
+
+  test "#destroy? when wrong user" do
+    record = OpenStruct.new(id: 2, user_id: 2)
+    refute ProductPolicy.new(@current_user, record).destroy?
+  end
 end
