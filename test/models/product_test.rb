@@ -12,6 +12,9 @@ class ProductTest < ActiveSupport::TestCase
 
   should belong_to(:owner).class_name("User").with_foreign_key(:user_id).inverse_of(:products)
 
+  should have_many(:placements)
+  should have_many(:orders).through(:placements)
+
   should validate_presence_of(:title)
   should validate_numericality_of(:price_in_cents).only_integer
 end
