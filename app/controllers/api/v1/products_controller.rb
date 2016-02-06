@@ -1,13 +1,12 @@
 class API::V1::ProductsController < ApplicationController
-  before_action :authenticate_with_token!, only: [:create, :update, :destroy]
+  before_action :authenticate_with_token!, only: %i[create update destroy]
+  before_action :set_and_authorize_product!, only: %i[show update destroy]
 
   def index
     @products = policy_scope(Product)
   end
 
   def show
-    @product = Product.find(params[:id])
-    authorize @product
   end
 
   def create
@@ -22,8 +21,6 @@ class API::V1::ProductsController < ApplicationController
   end
 
   def update
-    @product = Product.find(params[:id])
-    authorize @product
     if @product.update permitted_attributes(@product)
       render :show, status: 200, location: [:api, @product]
     else
@@ -32,9 +29,14 @@ class API::V1::ProductsController < ApplicationController
   end
 
   def destroy
-    product = Product.find(params[:id])
-    authorize product
-    product.destroy!
+    @product.destroy!
     head 204
+  end
+
+private
+
+  def set_and_authorize_product!
+    @product = Product.find(params[:id])
+    authorize @product
   end
 end

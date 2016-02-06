@@ -1,9 +1,8 @@
 class API::V1::UsersController < ApplicationController
-  before_action :authenticate_with_token!, only: [:update, :destroy]
+  before_action :authenticate_with_token!, only: %i[update destroy]
+  before_action :set_and_authorize_user!, only: %i[show update destroy]
 
   def show
-    @user = User.find(params[:id])
-    authorize @user
   end
 
   def create
@@ -17,8 +16,6 @@ class API::V1::UsersController < ApplicationController
   end
 
   def update
-    @user = User.find(params[:id])
-    authorize @user
     if @user.update permitted_attributes(@user)
       render :show, status: 200, location: [:api, @user]
     else
@@ -27,9 +24,14 @@ class API::V1::UsersController < ApplicationController
   end
 
   def destroy
-    user = User.find(params[:id])
-    authorize user
-    user.destroy!
+    @user.destroy!
     head 204
+  end
+
+private
+
+  def set_and_authorize_user!
+    @user = User.find(params[:id])
+    authorize @user
   end
 end
