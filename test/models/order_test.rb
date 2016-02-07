@@ -13,4 +13,14 @@ class OrderTest < ActiveSupport::TestCase
 
   should have_many(:placements)
   should have_many(:products).through(:placements)
+
+  test "#dispatch! sets total and creates order" do
+    products = 2.times.map { create(:product, price_in_cents: 5) }
+    order = build(:order, products: products)
+
+    assert_difference 'Order.count', 1 do
+      order.dispatch!
+      assert_equal 10, order.total_in_cents
+    end
+  end
 end

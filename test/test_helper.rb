@@ -15,6 +15,6 @@ class ActiveSupport::TestCase
   fixtures :all
 
   def as_parsed_json(object, options = {})
-	JSON.parse object.to_json(options), symbolize_names: true
+  	JSON.parse object.to_json(options), symbolize_names: true
   end
 end

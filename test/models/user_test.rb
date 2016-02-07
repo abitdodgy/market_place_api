@@ -13,6 +13,7 @@ class UserTest < ActiveSupport::TestCase
   should have_db_index(:auth_token).unique(true)
 
   should have_many(:products)
+  should have_many(:orders)
 
   valid_emails = [
     'homer@simp.sp',
