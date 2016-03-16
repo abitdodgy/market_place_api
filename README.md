@@ -6,7 +6,7 @@ This is an API app based on, but not identical to, the API on Rails book. Severa
 
 Building this app was a lot of fun, and API feel light-weight. In that, they're a lot easier to work with than apps that span the entire stack. You don't have to worry about the front-end layer, allowing you to focus on writing great controllers and fabulous models!
 
-The chapters are divided into branches.
+The chapters are divided into branches. The master branch contains the most complete form of the app.
 
 - [Setting Up](https://github.com/abitdodgy/market_place_api/tree/2-setting-api)
 - [Presenting the Users](https://github.com/abitdodgy/market_place_api/tree/3-presenting-the-users)
