@@ -34,7 +34,9 @@ class API::V1::ProductsControllerTest < ActionController::TestCase
     user = create(:user)
     api_authorization_header token: user.auth_token
 
-    post :create, product: attributes_for(:product)
+    assert_difference 'Product.count', 1 do
+      post :create, product: attributes_for(:product)
+    end
     expected = as_parsed_json Product.last, json_options
 
     assert_equal expected, json_response_body
