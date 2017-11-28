@@ -1,10 +1,8 @@
-This is an API app based on, but not identical to, the API on Rails book. Several bugs that were present in the book are fixed, along with a many code improvements. Some deviations:
+This API is based on the API on Rails book. Several bugs present in the book are fixed along with a many code improvements. Some deviations:
 
 1. I decided to use jbuilder instead of AMS.
 2. I decided to use Pundit for authorization rather than vanila controller scoping (i.e: not current_user.foo).
 3. I used MiniTest instead of Rspec. I used shoulda-matchers for the models.
-
-Building this app was a lot of fun, and API feel light-weight. In that, they're a lot easier to work with than apps that span the entire stack. You don't have to worry about the front-end layer, allowing you to focus on writing great controllers and fabulous models!
 
 The chapters are divided into branches. The master branch contains the most complete form of the app.
 
